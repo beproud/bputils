@@ -136,8 +136,8 @@ if not use_system_version:
         'JSONDecoder', 'JSONEncoder',
     ]
 
-    from django.utils.simplejson.decoder import JSONDecoder
-    from django.utils.simplejson.encoder import JSONEncoder
+    from bputils.simplejson.decoder import JSONDecoder
+    from bputils.simplejson.encoder import JSONEncoder
 
     _default_encoder = JSONEncoder(
         skipkeys=False,
