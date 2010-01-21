@@ -1,10 +1,10 @@
 # vim:fileencoding=utf-8
 import re
 
-from django.utils.html import escape
-from django.conf import settings
+from strutils import force_unicode
 
 __all__ = (
+    'escape',
     'sanitize_html',
     'urlize',
 )
@@ -16,6 +16,12 @@ import HTMLParser
 HTMLParser.attrfind = re.compile(
     r'\s*([a-zA-Z_][-.:a-zA-Z_0-9]*)(\s*=\s*'
     r'(\'[^\']*\'|"[^"]*"|[^">\s]*))?')
+
+def escape(html):
+    """
+    Returns the given HTML with ampersands, quotes and angle brackets encoded.
+    """
+    return force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
 
 DEFAULT_VALID_TAGS = {
     'b': (),
@@ -98,7 +104,6 @@ def sanitize_html(htmlSource, encoding=None, valid_tags=DEFAULT_VALID_TAGS, vali
 
     js_regex = re.compile(r'[\s]*(&#x.{1,7})?'.join(list('javascript')))
     css_regex = re.compile(r' *(%s): *([^;]*);?' % '|'.join(valid_styles), re.IGNORECASE)
-    domain_regex = re.compile(r"^ *http\://(?!%s)" % re.escape(settings.DOMAIN)) 
     # Sanitize html with BeautifulSoup
     if encoding:
         soup = BeautifulSoup(htmlSource, fromEncoding=encoding)
