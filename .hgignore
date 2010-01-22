@@ -1,4 +1,5 @@
 syntax: glob
+bputils.egg-info
 *.orig
 *.rej
 *~
