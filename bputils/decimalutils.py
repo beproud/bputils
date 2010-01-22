@@ -171,6 +171,17 @@ def log(self, base=10, context=None):
     described here: http://www.programmish.com/?p=25
 
     Input must be a decimal
+
+    >>> print log(Decimal("1.204"))
+    0.0806264869218057475447822012
+    >>> print log(Decimal("1.204"), 2)
+    0.2678353920976150027151526692
+
+    >>> import math
+    >>> abs(math.log(1.204, 10) - float(log(Decimal("1.204")))) < 1e-15
+    True
+    >>> abs(math.log(1.827528759292, 10) - float(log(Decimal("1.827528759292")))) < 1e-15
+    True
     """
     old_context = None
     if context is not None:
@@ -216,6 +227,15 @@ def ln(self, context=None):
     Returns the natural log of the given Decimal
 
     Input must be a decimal
+
+    >>> print ln(Decimal("1.204"))
+    0.1856493468866292953586851357
+
+    >>> import math
+    >>> abs(math.log(1.204) - float(ln(Decimal("1.204")))) < 1e-15
+    True
+    >>> abs(math.log(1.827528759292) - float(ln(Decimal("1.827528759292")))) < 1e-15
+    True
     """
     if hasattr(self, "ln"):
         return self.ln(context)

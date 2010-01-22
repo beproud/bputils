@@ -23,3 +23,10 @@ class TestDecimalUtils(TestCase):
                 pass
             else:
                 self.fail("Expected failure for %s" % val)
+
+    def test_numbers_only(self):
+        for val in ["1.04949", "9", "-1.04"]:
+            self.assertDecimalValue(force_decimal(val, numbers_only=True), val)
+        
+        for val in ["val", u"日本語"]:
+            self.assertEqual(force_decimal(val, numbers_only=True), val)
