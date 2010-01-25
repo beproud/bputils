@@ -8,6 +8,7 @@ bputils.egg-info
 *.o
 *.pyc
 *.swp
+docs/ja/build
 
 syntax: regexp
 .*\#.*\#$ 
