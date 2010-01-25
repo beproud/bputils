@@ -1,8 +1,6 @@
 # vim:fileencoding=utf-8
 import re
 
-from strutils import force_unicode
-
 __all__ = (
     'escape',
     'sanitize_html',
@@ -17,11 +15,15 @@ HTMLParser.attrfind = re.compile(
     r'\s*([a-zA-Z_][-.:a-zA-Z_0-9]*)(\s*=\s*'
     r'(\'[^\']*\'|"[^"]*"|[^">\s]*))?')
 
-def escape(html):
-    """
-    Returns the given HTML with ampersands, quotes and angle brackets encoded.
-    """
-    return force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
+try: 
+    from django.utils.html import escape
+except ImportError:
+    from strutils import force_unicode
+    def escape(html):
+        """
+        Returns the given HTML with ampersands, quotes and angle brackets encoded.
+        """
+        return force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
 
 DEFAULT_VALID_TAGS = {
     'b': (),
