@@ -100,7 +100,7 @@ def token_callback_decorator(callback, min_word_length=1, ignore_word_re=None, w
 
 class Token(StrAndUnicode):
     def __init__(self, word, features={}):
-        self.features ={
+        self.features = {
             "word_class": None,
             "sub_word_class1": None,
             "sub_word_class2": None,
@@ -117,6 +117,18 @@ class Token(StrAndUnicode):
     def __unicode__(self):
         return self.word
 
+# MeCab feature マッピング
+FEATURE_MAP = (
+    "word_class",
+    "sub_word_class1",
+    "sub_word_class2",
+    "sub_word_class3",
+    "conjugated",
+    "conjugation",
+    "base",
+    "reading",
+    "pronunciation",
+)
 class Tokenizer(object):
     """
     日本語を汎用的に分割するトーケンアイザー
@@ -154,22 +166,12 @@ class Tokenizer(object):
 
         word = u''
         while n:
-            features = map(self._clean_feature, unicode(n.feature, self.encoding).split(','))
-            features_dict = {
-                "word_class": features[0],
-                "sub_word_class1": features[1],
-                "sub_word_class2": features[2],
-                "sub_word_class3": features[3],
-                "conjugated": features[4], 
-                "conjugation": features[5],
-                "base": features[6],
-                "reading": features[7],
-                "pronunciation": features[8],
-            }
-            word = unicode(n.surface, "utf-8")
-
+            features_dict = {}
+            for i, feature in enumerate(map(self._clean_feature, unicode(n.feature, self.encoding).split(','))):
+                features_dict[FEATURE_MAP[i]] = feature
+            
             # 名詞を抽出
-            for token in self.token_callback(word, features_dict):
+            for token in self.token_callback(unicode(n.surface, "utf-8"), features_dict):
                 yield token 
 
             n = n.next
