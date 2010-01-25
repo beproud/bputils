@@ -74,7 +74,7 @@ RE_ANCHOR_STR = ur'(http[s]*\:\/\/.%s)(,|&gt;|&lt;|<|>|\s| |　|\xe3\x80\x80|$)'
 RE_ANCHOR_NOLIMIT = re.compile(anchor_re_str % "+?")
 RE_ANCHOHR_RES_STR = ur'<a href="\1"%s>\1</a>\2'
 
-def sanitize_html(htmlSource, encoding=None, valid_tags=DEFAULT_VALID_TAGS, valid_styles=DEFAULT_VALID_STYLES, add_nofollow=False):
+def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAULT_VALID_TAGS, valid_styles=DEFAULT_VALID_STYLES, add_nofollow=False):
     """
     Clean bad html content. Currently this simply strips tags that
     are not in the VALID_TAGS setting.
@@ -86,6 +86,9 @@ def sanitize_html(htmlSource, encoding=None, valid_tags=DEFAULT_VALID_TAGS, vali
     Returns the sanitized html content.
 
     encoding is the encoding of the htmlSource
+
+    type is the mimetype of the content. It is ignored and is present only
+    for compatibility with feedparser. 
 
     valid_tags is a dictionary containing keys of valid tag names which
     have a value that is a list of valid attribute names. An empty list
