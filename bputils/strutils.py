@@ -65,8 +65,6 @@ except ImportError:
         """
         if strings_only and isinstance(s, (types.NoneType, int)):
             return s
-        if isinstance(s, Promise):
-            return unicode(s).encode(encoding, errors)
         elif not isinstance(s, basestring):
             try:
                 return str(s)
