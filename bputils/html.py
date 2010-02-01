@@ -73,7 +73,7 @@ DEFAULT_VALID_STYLES = (
 )
 
 RE_ANCHOR_STR = ur'(http[s]*\:\/\/.%s)(,|&gt;|&lt;|<|>|\s| |　|\xe3\x80\x80|$)'
-RE_ANCHOR_NOLIMIT = re.compile(anchor_re_str % "+?")
+RE_ANCHOR_NOLIMIT = re.compile(RE_ANCHOR_STR % "+?")
 RE_ANCHOHR_RES_STR = ur'<a href="\1"%s>\1</a>\2'
 
 def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAULT_VALID_TAGS, valid_styles=DEFAULT_VALID_STYLES, add_nofollow=False):
@@ -132,12 +132,12 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
         comment.extract()
 
     for tag in soup.findAll(True):
-        if tag.name not in VALID_TAGS:
+        if tag.name not in valid_tags:
             tag.hidden = True
         else:
             tag.attrs = [(attr, js_regex.sub('', val))
                             for attr, val in tag.attrs 
-                            if attr in VALID_TAGS[tag.name]]
+                            if attr in valid_tags[tag.name]]
 
     # Add rel="nofollow" links
     if add_nofollow:
