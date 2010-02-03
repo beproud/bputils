@@ -1,33 +1,32 @@
-====================
-decimalutils
-====================
+:mod:`decimalutils` -- decimal モジュールユティリティ
+================================================================
 
-decimalutilsは Python の decimal モジュールの拡張ユティリティモジュールです。
+.. module:: bputils.decimalutils 
+   :platform: Unix, Windows
+      :synopsis: decimal モジュールユティリティ
+      .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 
---------------------
-force_decimal
---------------------
+decimalutils は Python の decimal モジュールの拡張ユティリティモジュールです。
 
-Decimal オブジェクトを変換する。対応タイプは int, long, float, basestring, unicode です。
+.. function:: force_decimal(d[, precision_loss[, numbers_only]])
 
-.. code-block:: python
+    Decimal オブジェクトを変換する。対応タイプは int, long, float, basestring, unicode です。::
+    
+        >>> from bputils.decimalutils import force_decimal 
+        >>> force_decimal(1)
+        Decimal('1')
+        >>> force_decimal(1.128492)
+        Decimal('1.128492')
+        >>> force_decimal("-0.492")
+        Decimal('-0.492') 
 
-    >>> from bputils.decimalutils import force_decimal 
-    >>> force_decimal(1)
-    Decimal('1')
-    >>> force_decimal(1.128492)
-    Decimal('1.128492')
-    >>> force_decimal("-0.492")
-    Decimal('-0.492') 
+    Python の float タイプは C の double タイプで実装されているので、バイナリ浮動小数点数の精度の損失が発生します。
+    バイナリ浮動小数点数は小数で概算した値として保存されていますので、ハードウエアに依存します。有効数字に気をつけないといけないところが面倒です。::
 
-Python の float タイプは C の double タイプで実装されているので、バイナリ浮動小数点数の精度の損失が発生します。バイナリ浮動小数点数は小数で概算した値として保存されていますので、ハードウエアに依存します。有効数字に気をつけないといけないところが面倒です。
-
-.. code-block:: python
-
-    >>> 1.1
-    1.1000000000000001
-    >>> 1.1 / 2
-    0.55000000000000004
+        >>> 1.1
+        1.1000000000000001
+        >>> 1.1 / 2
+        0.55000000000000004
 
 float は少数で概算した値なので、Decimalオブジェクトにコンバートする時に、注意しないといけないところがあります。str(float) は 12有効数字まで、変換しますので、精度を損失しないようにしないといけない際は、precision_loss の引数を False にします。
 
