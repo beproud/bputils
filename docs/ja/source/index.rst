@@ -16,10 +16,10 @@ https://project.beproud.jp/hg/bputils/
 
   datastructures
   decimalutils
-.. strutils 
-.. html 
-.. javascript 
-.. word 
+  strutils 
+  html 
+  javascript 
+  word 
 
 Indices and tables
 ===================================
