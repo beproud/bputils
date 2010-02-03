@@ -1,9 +1,9 @@
 # vim:fileencoding=utf-8
-from django.test import TestCase as DjangoTestCase
+from unittest import TestCase
 
-from commons.utils.strutils import * 
+from bputils.strutils import * 
 
-class StringUtilsTestCase(DjangoTestCase):
+class StringUtilsTestCase(TestCase):
     
     def test_trim(self):
         self.assertEqual(trim(u" テスト "), u"テスト")
