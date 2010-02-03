@@ -92,7 +92,7 @@ def trim(s, encoding="utf-8"):
 def force_int(num, default=None):
     try:
         return int(num)
-    except ValueError:
+    except (ValueError, TypeError):
         return default
 
 def make_random_key(size=128, values=None):

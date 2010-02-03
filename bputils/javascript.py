@@ -1,6 +1,7 @@
 # vim:fileencoding=utf-8
+import datetime
 
-from bputils.utils import simplejson
+from bputils import simplejson
 
 __all__ = (
     'SafeJSONEncoder',
@@ -32,11 +33,9 @@ class SafeJSONEncoder(simplejson.JSONEncoder):
 
     def default(self, o):
         if isinstance(o, datetime.datetime):
-            d = datetime_safe.new_datetime(o)
-            return d.strftime("%s %s" % (self.DATE_FORMAT, self.TIME_FORMAT))
+            return o.strftime("%s %s" % (self.DATE_FORMAT, self.TIME_FORMAT))
         elif isinstance(o, datetime.date):
-            d = datetime_safe.new_date(o)
-            return d.strftime(self.DATE_FORMAT)
+            return o.strftime(self.DATE_FORMAT)
         elif isinstance(o, datetime.time):
             return o.strftime(self.TIME_FORMAT)
         elif isinstance(o, decimal.Decimal):
