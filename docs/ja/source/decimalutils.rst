@@ -3,8 +3,8 @@
 
 .. module:: bputils.decimalutils 
    :platform: Unix, Windows
-      :synopsis: decimal モジュールユティリティ
-      .. moduleauthor:: Ian Lewis <ian@beproud.jp>
+   :synopsis: decimal モジュールユティリティ
+.. moduleauthor:: Ian Lewis <ian@beproud.jp>
 
 decimalutils は Python の decimal モジュールの拡張ユティリティモジュールです。
 
