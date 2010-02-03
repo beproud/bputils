@@ -47,3 +47,75 @@ decimalutils は Python の decimal モジュールの拡張ユティリティ�
         >>> from bputils.decimalutils import force_decimal
         >>> force_decimal(1.1, precision_loss=False)
         Decimal('1.100000000000000088817841970')
+
+.. function:: pi()
+
+    現在の精度で :math:`\pi` を計算して、Decimalオブジェクトとして、返します。:
+    
+        >>> print pi()
+        3.141592653589793238462643383
+        >>> pi()
+        Decimal('3.141592653589793238462643383')
+
+.. function:: exp(x)
+
+    現在の精度で :math:`e^{x}` を計算します。::
+
+        >>> print exp(Decimal(1))
+        2.718281828459045235360287471
+        >>> print exp(Decimal(2))
+        7.389056098930650227230427461
+        >>> print exp(2.0)
+        7.38905609893
+        >>> print exp(2+0j)
+        (7.38905609893+0j)
+
+.. function:: cos(x)
+
+    現在の精度で、x の余弦を計算します。::
+
+        >>> print cos(Decimal('0.5'))
+        0.8775825618903727161162815826
+        >>> print cos(0.5)
+        0.87758256189
+        >>> print cos(0.5+0j)
+        (0.87758256189+0j)
+
+.. function:: sin(x)
+
+    現在の精度で、x の正弦を計算します。::
+
+        >>> print sin(Decimal('0.5'))
+        0.4794255386042030002732879352
+        >>> print sin(0.5)
+        0.479425538604
+        >>> print sin(0.5+0j)
+        (0.479425538604+0j)
+
+.. function:: log(self[, base[, context]])
+
+    現在の精度で、selfの対数を計算します。::
+
+        >>> print log(Decimal("1.204"))
+        0.0806264869218057475447822012
+        >>> print log(Decimal("1.204"), 2)
+        0.2678353920976150027151526692
+
+        >>> import math
+        >>> abs(math.log(1.204, 10) - float(log(Decimal("1.204")))) < 1e-15
+        True
+        >>> abs(math.log(1.827528759292, 10) - float(log(Decimal("1.827528759292")))) < 1e-15
+        True
+
+.. function:: ln(self[, context])
+
+    現在の精度で、selfの自然対数を計算します。::
+
+        >>> print ln(Decimal("1.204"))
+        0.1856493468866292953586851357
+
+        >>> import math
+        >>> abs(math.log(1.204) - float(ln(Decimal("1.204")))) < 1e-15
+        True
+        >>> abs(math.log(1.827528759292) - float(ln(Decimal("1.827528759292")))) < 1e-15
+        True
