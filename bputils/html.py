@@ -3,6 +3,7 @@ import re
 
 __all__ = (
     'escape',
+    'escape_entities',
     'sanitize_html',
     'urlize',
 )
@@ -25,13 +26,20 @@ except ImportError:
         """
         return force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
 
+def escape_entities(text):
+        return re.sub(r'&(?![A-Za-z]+;)', '&amp;', text)\
+                 .replace('<','&lt;')\
+                 .replace('>', '&gt;')\
+                 .replace('"', '&quot;')\
+                 .replace("'", '&apos;')
+
 DEFAULT_VALID_TAGS = {
     'b': (),
     'blockquote': ('style',),
     'em': (),
     'strong': (),
     'strike': (),
-    'a': ('href', 'title'),
+    'a': ('href', 'title', 'rel'),
     'i': (),
     'br': (),
     'ul': (),
@@ -153,6 +161,12 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
         for key,val in css_regex.findall(tag["style"]):
             style += "%s:%s;" % (key,val.strip())
         tag["style"] = style
+
+    # Sanitize html text by changing bad text to entities.
+    # BeautifulSoup will do this for href and src attributes
+    # on anchors and image tags but not for text.
+    for text in soup.findAll(text=True):
+        text.replaceWith(escape_entities(text))
 
     return soup.renderContents().decode('utf8') 
 
