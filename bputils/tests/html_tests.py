@@ -6,6 +6,14 @@ from unittest import TestCase
 from bputils.html import * 
 from bputils.html import DEFAULT_VALID_TAGS, DEFAULT_VALID_STYLES 
 
+class UrlizeTest(TestCase):
+
+    def test_domain_check(self):
+        self.assertEqual(
+            urlize(u'このURL、http://beproud.jpビープラウドホームページ'),
+            u'このURL、<a href="http://beproud.jp">http://beproud.jp</a>ビープラウドホームページ',
+        )
+
 class HTMLSanitizationTest(TestCase):
     valid_tags = DEFAULT_VALID_TAGS
     valid_styles = DEFAULT_VALID_STYLES
