@@ -14,6 +14,7 @@ __all__ = (
     'optimize',
     'hankaku',
     'normalize',
+    'Token',
     'Tokenizer',
 )
 
@@ -87,20 +88,26 @@ def normalize(s):
 def token_callback_decorator(callback, min_word_length=1, ignore_word_re=None, word_classes=None):
     def token_callback(word, features):
         def _def_callback(word, features):
-            yield Token(word, features)
+            return Token.new(word, "utf8", features=features)
 
         cb = callback or _def_callback
 
-        for token in cb(word, features):
-            if len(token.word) >= min_word_length and \
-                    ((ignore_word_re is None) or not ignore_word_re.match(token.word)) and \
+        token_list = cb(word, features)
+        if isinstance(token_list, basestring):
+            token_list = [token_list]
+        for token in token_list:
+            if token is not None and len(token) >= min_word_length and \
+                    ((ignore_word_re is None) or not ignore_word_re.match(token)) and \
                     ((word_classes is None) or token.features["word_class"] in word_classes):
-                yield Token(word, features)
+                yield token
     return token_callback
 
-class Token(StrAndUnicode):
-    def __init__(self, word, features={}):
-        self.features = {
+class Token(unicode):
+
+    @classmethod
+    def new(cls, word, encoding="ascii", features={}):
+        token = cls(word, encoding)
+        token.features = {
             "word_class": None,
             "sub_word_class1": None,
             "sub_word_class2": None,
@@ -111,11 +118,8 @@ class Token(StrAndUnicode):
             "reading": None,
             "pronunciation": None,
         }
-        self.features.update(features)
-        self.word = word
-
-    def __unicode__(self):
-        return self.word
+        token.features.update(features)
+        return token
 
 # MeCab feature マッピング
 FEATURE_MAP = (
@@ -151,7 +155,7 @@ class Tokenizer(object):
     >>> t = Tokenizer(min_word_length=2, token
     """
 
-    def __init__(self, encoding="utf-8", min_word_length=1, ignore_word_re=None, token_callback=None, word_classes=None):
+    def __init__(self, encoding="utf8", min_word_length=1, ignore_word_re=None, token_callback=None, word_classes=None):
         self.encoding = encoding
         self.min_word_length = min_word_length
         self.ignore_word_re = ignore_word_re
@@ -166,13 +170,14 @@ class Tokenizer(object):
 
         word = u''
         while n:
-            features_dict = {}
-            for i, feature in enumerate(map(self._clean_feature, unicode(n.feature, self.encoding).split(','))):
-                features_dict[FEATURE_MAP[i]] = feature
-            
-            # 名詞を抽出
-            for token in self.token_callback(unicode(n.surface, "utf-8"), features_dict):
-                yield token 
+            if n.surface:
+                features_dict = {}
+                for i, feature in enumerate(map(self._clean_feature, n.feature.split(','))):
+                    features_dict[FEATURE_MAP[i]] = feature
+                
+                # 名詞を抽出
+                for token in self.token_callback(n.surface, features_dict):
+                    yield token 
 
             n = n.next
 
