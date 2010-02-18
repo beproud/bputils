@@ -93,8 +93,8 @@ def token_callback_decorator(callback, min_word_length=1, ignore_word_re=None, w
         cb = callback or _def_callback
 
         token_list = cb(word, features)
-        if isinstance(token_list, basestring):
-            token_list = [token_list]
+        if not isinstance(token_list, (list, tuple)):
+            token_list = (token_list,)
         for token in token_list:
             if token is not None and len(token) >= min_word_length and \
                     ((ignore_word_re is None) or not ignore_word_re.match(token)) and \
