@@ -15,6 +15,10 @@ __all__ = (
 try:
     from django.utils.encoding import StrAndUnicode, force_unicode, smart_str
 except ImportError:
+    import types
+    import datetime
+    from decimal import Decimal
+
     class StrAndUnicode(object):
         """
         A class whose __str__ returns its __unicode__ as a UTF-8 bytestring.
@@ -23,6 +27,19 @@ except ImportError:
         """
         def __str__(self):
             return self.__unicode__().encode('utf-8')
+
+    def is_protected_type(obj):
+        """Determine if the object instance is of a protected type.
+
+        Objects of protected types are preserved as-is when passed to
+        force_unicode(strings_only=True).
+        """
+        return isinstance(obj, (
+            types.NoneType,
+            int, long,
+            datetime.datetime, datetime.date, datetime.time,
+            float, Decimal)
+        )
 
     def force_unicode(s, encoding='utf-8', strings_only=False, errors='strict'):
         """
