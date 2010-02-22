@@ -1,7 +1,7 @@
 # vim:fileencoding=utf-8
 from unittest import TestCase
 
-from bputils.strutils import * 
+from bputils.strutils import *
 
 class StringUtilsTestCase(TestCase):
     
@@ -25,6 +25,16 @@ class StringUtilsTestCase(TestCase):
 
     def test_force_int_none(self):
         self.assertEqual(force_int(None, 1), 1)
+
+    def test_force_unicode(self):
+        class UnicodeTest(StrAndUnicode):
+            def __unicode__(self):
+                return u"Unicodeテスト"
+        self.assertEqual(force_unicode(UnicodeTest()), u"Unicodeテスト")
+        self.assertEqual(force_unicode(22), u"22")
+        self.assertEqual(force_unicode(22, strings_only=True), 22)
+
+        self.assertEqual(force_unicode(u"テスト".encode("cp932"), encoding="cp932"), u"テスト") 
     
     def test_make_random_key(self):
         self.assertEqual(len(make_random_key(8)), 8)
