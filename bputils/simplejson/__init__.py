@@ -106,15 +106,23 @@ __version__ = '2.0.7'
 
 use_system_version = False
 try:
-    # The system-installed version has priority providing it is either not an
-    # earlier version or it contains the C speedups.
-    import simplejson
-    if (simplejson.__version__.split('.') >= __version__.split('.') or
-            hasattr(simplejson, '_speedups')):
-        from simplejson import *
-        use_system_version = True
+    # Use whatever Django gives us. 
+    from django.utils.simplejson import *
+    use_system_version = True
 except ImportError:
     pass
+
+if not use_system_version:
+    try:
+        # The system-installed version has priority providing it is either not an
+        # earlier version or it contains the C speedups.
+        import simplejson
+        if (simplejson.__version__.split('.') >= __version__.split('.') or
+                hasattr(simplejson, '_speedups')):
+            from simplejson import *
+            use_system_version = True
+    except ImportError:
+        pass
 
 if not use_system_version:
     try:
