@@ -43,9 +43,9 @@ class SafeJSONEncoder(simplejson.JSONEncoder):
         elif isinstance(o, datetime.time):
             return o.strftime(self.TIME_FORMAT)
         elif isinstance(o, decimal.Decimal):
-            return str(o)
+            return int(o) if o % 1 == 0 else float(str(o))
         else:
-            return escapejs_json(super(SafeJSONEncoder, self).default(o))
+            return super(SafeJSONEncoder, self).default(o)
 
 def escapejs_json(s):
     """
