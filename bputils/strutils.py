@@ -132,16 +132,16 @@ def abbrev(s, num=255, end="..."):
 
     返す文字列の長さは、num以上にならないのを保証します。
 
-    >>> abbrev('blahblahblah', 6)
-    'bla...'
-    >>> abbrev('blahblahblah', 12)
-    'blahblahblah'
+    >>> abbrev('spamspamspam', 6)
+    'spa...'
+    >>> abbrev('spamspamspam', 12)
+    'spamspamspam'
     >>> abbrev('blahblahblah', 13)
-    'blahblahb...'
-    >>> abbrev('blahblahblah', 1)
-    'b'
-    >>> abbrev('blahblahblah', 2, '.')
-    'b.'
+    'eggseggseg...'
+    >>> abbrev('eggseggseggs', 1)
+    'e'
+    >>> abbrev('eggseggseggs', 2, '.')
+    'e.'
     """
     index = num - len(end)
     if len(s) > num:

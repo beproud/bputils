@@ -46,11 +46,11 @@ class StringUtilsTestCase(TestCase):
         self.assertEqual(make_random_key(-1), "")
 
     def test_abbrev(self):
-        self.assertEqual(abbrev('blahblahblah', 6), 'bla...')
-        self.assertEqual(abbrev('blahblahblah', 12), 'blahblahblah')
-        self.assertEqual(abbrev('blahblahblah', 11, '....'), 'blahbla....')
-        self.assertEqual(abbrev('blahblahblah', 1), 'b')
-        self.assertEqual(abbrev('blahblahblah', 2, '.'), 'b.')
+        self.assertEqual(abbrev('spamspamspam', 6), 'spa...')
+        self.assertEqual(abbrev('spamspamspam', 12), 'spamspamspam')
+        self.assertEqual(abbrev('eggseggseggs', 11, '....'), 'eggsegg....')
+        self.assertEqual(abbrev('eggseggseggs', 1), 'e')
+        self.assertEqual(abbrev('eggseggseggs', 2, '.'), 'e.')
 
     def test_abbrev_unicode(self):
         self.assertEqual(abbrev(u'テストテストテスト', 6), u'テスト...')
