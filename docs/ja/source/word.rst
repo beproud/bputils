@@ -1,7 +1,7 @@
 :mod:`word` -- 自然言語ユティリティ
 ================================================================
 
-.. module:: bputils.strutils
+.. module:: bputils.word
    :synopsis:  自然言語ユティリティ
 .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 .. moduleauthor:: Shinya Okano <tokibito@beproud.jp>
