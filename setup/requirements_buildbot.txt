@@ -1,0 +1,3 @@
+zenhan==0.4
+
+http://downloads.sourceforge.net/project/mecab/mecab-python/0.98/mecab-python-0.98.tar.gz

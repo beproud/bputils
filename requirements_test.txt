@@ -1,1 +1,0 @@
--e git+git://github.com/ishikawa/modipyd.git@release-1-1-rc1#egg=modipyd
