@@ -1,11 +1,31 @@
 # vim:fileencoding=utf-8
 import re
+import string
 
 __all__ = (
     'escape',
     'escape_entities',
     'sanitize_html',
     'urlize',
+
+    'URL_VALID_CHARS',
+    'URL_PATH_VALID_CHARS',
+    'URL_QUERY_VALID_CHARS',
+    'URL_FRAGMENT_VALID_CHARS',
+
+    'DOMAIN_RE',
+    'PORT_RE',
+    'IP_ADDRESS_RE',
+    'IP_PORT_RE',
+    'IP_DOMAIN_RE',
+    'URL_DOMAIN_RE',
+    'URL_RE',
+    'URL_RE_CMP',
+
+    'LOOSE_DOMAIN_RE',
+    'LOOSE_PORT_RE',
+    'LOOSE_URL_RE',
+    'LOOSE_URL_RE_CMP',
 )
 
 # Monkey-patch HTMLParser to allow parsing of html
@@ -80,9 +100,73 @@ DEFAULT_VALID_STYLES = (
     "text-decoration",
 )
 
-RE_ANCHOR_STR = ur'(http[s]*\:\/\/.%s)(,|&gt;|&lt;|<|>|\s| |　|\xe3\x80\x80|$)'
-RE_ANCHOR_NOLIMIT = re.compile(RE_ANCHOR_STR % "+?")
-RE_ANCHOHR_RES_STR = ur'<a href="\1"%s>\1</a>\2'
+HTTP_SCHEME_RE = 'http[s]*'
+
+# See: http://www.ietf.org/rfc/rfc1738.txt
+URL_SAFE = "$-_.+"
+URL_EXTRA = "!*'(),"
+URL_PATH_RESERVED = ';?'
+URL_QUERY_RESERVED = '#'
+URL_OTHER_RESERVED = ':@&=/'
+URL_RESERVED = URL_PATH_RESERVED + URL_QUERY_RESERVED + URL_OTHER_RESERVED
+URL_ESCAPE = '%'
+URL_ALNUM = string.letters + string.digits
+
+URL_VALID_CHARS = URL_ALNUM + URL_SAFE + URL_EXTRA + URL_RESERVED + URL_ESCAPE
+URL_PATH_VALID_CHARS = URL_ALNUM + URL_SAFE + URL_EXTRA + URL_OTHER_RESERVED + URL_ESCAPE
+URL_QUERY_VALID_CHARS = URL_ALNUM + URL_SAFE + URL_EXTRA + URL_OTHER_RESERVED + URL_PATH_RESERVED + URL_ESCAPE
+URL_FRAGMENT_VALID_CHARS = URL_ALNUM + URL_SAFE + URL_EXTRA + URL_RESERVED + URL_ESCAPE
+
+
+# 0-65535
+# See: http://www.regular-expressions.info/numericranges.html 
+PORT_RE = "%s" % "|".join([
+    "6553[0-5]",
+    "655[0-2][0^9]",
+    "65[0-4][0-9][0-9]",
+    "6[0-4][0-9][0-9][0-9]",
+    "[1-5][0-9][0-9][0-9][0-9]",
+    "[1-9][0-9][0-9][0-9]",
+    "[1-9][0-9][0-9]",
+    "[1-9][0-9]",
+    "[1-9]",
+])
+
+# See: http://www.shauninman.com/archive/2006/05/08/validating_domain_names
+# See: http://www.iana.org/domains/root/db/
+DOMAIN_RE = '(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\\.)+(?:(?:a[cdefgilmnoqrstuwxz]|aero|arpa)|(?:b[abdefghijmnorstvwyz]|biz)|(?:c[acdfghiklmnorsuvxyz]|cat|com|coop)|d[ejkmoz]|(?:e[ceghrstu]|edu)|f[ijkmor]|(?:g[abdefghilmnpqrstuwy]|gov)|h[kmnrtu]|(?:i[delmnoqrst]|info|int)|(?:j[emop]|jobs)|k[eghimnprwyz]|l[abcikrstuvy]|(?:m[acdghklmnopqrstuvwxyz]|mil|mobi|museum)|(?:n[acefgilopruz]|name|net)|(?:om|org)|(?:p[aefghklmnrstwy]|pro)|qa|r[eouw]|s[abcdeghijklmnortvyz]|(?:t[cdfghjklmnoprtvwz]|travel)|u[agkmsyz]|v[aceginu]|w[fs]|y[etu]|z[amw])'
+# Domain with port number
+DOMAIN_PORT_RE = '(%s)(?::(%s))?' % (DOMAIN_RE, PORT_RE)
+
+# See: http://www.regular-expressions.info/regexbuddy/ipaccurate.html
+IP_ADDRESS_RE = '(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
+# IP address with port number
+IP_PORT_RE = '(%s)(?::(%s))?' % (IP_ADDRESS_RE, PORT_RE)
+
+# Domain or IP address
+IP_DOMAIN_RE = '(%s)|(%s)' % (DOMAIN_RE, IP_ADDRESS_RE)
+
+# Domain or IP address with port number
+URL_DOMAIN_RE = '(?:%s)(?::(%s))?' % (IP_DOMAIN_RE, PORT_RE)
+URL_RE = r'(%s)\:\/\/(%s)(/[%s]*)?(?:\?([%s]*))?(?:\#([%s]*))?' % (
+    HTTP_SCHEME_RE,
+    URL_DOMAIN_RE,
+    re.escape(URL_PATH_VALID_CHARS),
+    re.escape(URL_QUERY_VALID_CHARS),
+    re.escape(URL_FRAGMENT_VALID_CHARS),
+)
+URL_RE_CMP = re.compile(URL_RE)
+
+LOOSE_DOMAIN_RE = r"(?:localhost|\w+\.\w+(?:\.\w+)*)"
+LOOSE_PORT_RE = "\d+"
+LOOSE_URL_RE = r'(%s)\:\/\/(%s)/([%s]*)(?:\?([%s]*))?(?:\#([%s]*))?' % (
+    HTTP_SCHEME_RE,
+    '(?:(%s)|(%s))(?::(%s))?' % (LOOSE_DOMAIN_RE, IP_ADDRESS_RE, LOOSE_PORT_RE),
+    re.escape(URL_PATH_VALID_CHARS),
+    re.escape(URL_QUERY_VALID_CHARS),
+    re.escape(URL_FRAGMENT_VALID_CHARS),
+)
+LOOSE_URL_RE_CMP = re.compile(LOOSE_URL_RE)
 
 def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAULT_VALID_TAGS, valid_styles=DEFAULT_VALID_STYLES, add_nofollow=False):
     """
@@ -170,7 +254,8 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
 
     return soup.renderContents().decode('utf8') 
 
-def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
+URLIZE_TMPL = '<a href="%(link_url)s"%(attrs)s>%(link_text)s</a>'
+def urlize(text, trim_url_limit=None, attrs={}, url_re=URL_RE_CMP, autoescape=False):
     """text内URLを抽出してアンカータグで囲む
     
     URLのデリミタは半角カンマ、<>(エスケープ済み含む)、\s、全角スペース、行末で、これらが末尾にマッチしない場合はURLとして認識しません。
@@ -184,17 +269,16 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
         autoescape:     Trueを与えるとタグエスケープを行います。
     
     """
+    from strutils import abbrev
+
     if autoescape:
         text = escape(text)
 
-    if trim_url_limit:
-        anchor_re = re.compile(RE_ANCHOR_STR % "{,%s}?" % trim_url_limit)
-    else:
-        anchor_re = RE_ANCHOR_NOLIMIT
+    def _repl(m):
+        return URLIZE_TMPL % {
+            "link_url": m.group(),
+            "attrs": "".join(map(lambda x: ' %s="%s"' % x, attrs.iteritems())),
+            "link_text": abbrev(m.group(), trim_url_limit) if trim_url_limit is not None else m.group(),
+        }
 
-    if nofollow:
-        anchor_re_result = RE_ANCHOHR_RES_STR % ' rel="nofollow"'
-    else:
-        anchor_re_result = RE_ANCHOHR_RES_STR % ""
-
-    return anchor_re.sub(anchor_re_result, text)
+    return url_re.sub(_repl, text)

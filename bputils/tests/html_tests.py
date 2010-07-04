@@ -1,10 +1,63 @@
-##:coding=utf8:
+#:coding=utf8:
 
-# vim:fileencoding=utf-8
+import re
 from unittest import TestCase
 
 from bputils.html import * 
 from bputils.html import DEFAULT_VALID_TAGS, DEFAULT_VALID_STYLES 
+
+class UrlReTest(TestCase):
+    def test_loose_domain_re(self):
+        domain_re = re.compile(LOOSE_DOMAIN_RE)
+        self.assertEqual(domain_re.match("localhost").group(), 'localhost')
+        self.assertTrue(domain_re.match("blah") is None)
+        self.assertEqual(domain_re.match("beproud.jp").group(), 'beproud.jp')
+        self.assertEqual(domain_re.match("www2.beproud.jp").group(), 'www2.beproud.jp')
+        self.assertEqual(domain_re.match("www2.static.beproud.jp").group(), 'www2.static.beproud.jp')
+        self.assertEqual(domain_re.match("www2.static.beproud.zcode").group(), 'www2.static.beproud.zcode')
+
+    def test_domain_re(self):
+        domain_re = re.compile(DOMAIN_RE)
+        self.assertTrue(domain_re.match("localhost") is None)
+        self.assertTrue(domain_re.match("blah") is None)
+        self.assertEqual(domain_re.match("zcode.jp").group(), 'zcode.jp')
+        self.assertEqual(domain_re.match("www2.zcode.jp").group(), 'www2.zcode.jp')
+        self.assertEqual(domain_re.match("www2.static.zcode.jp").group(), 'www2.static.zcode.jp')
+        self.assertTrue(domain_re.match("www2.zcode") is None)
+
+    def test_ip_address_re(self):
+        ip_address_re = re.compile(IP_ADDRESS_RE)
+        self.assertTrue(ip_address_re.match("localhost") is None)
+        self.assertTrue(ip_address_re.match("blah") is None)
+        self.assertTrue(ip_address_re.match("123.beproud.jp") is None)
+        self.assertTrue(ip_address_re.match("123.148.224.249") is not None)
+        self.assertTrue(ip_address_re.match("255.255.255.255") is not None)
+        self.assertTrue(ip_address_re.match("123.148.294.226") is None)
+        self.assertTrue(ip_address_re.match("123.999.224.249") is None)
+
+    def test_url_re(self):
+        url_re = re.compile(URL_RE)
+        self.assertEquals(
+            url_re.match("http://www.beproud.jp/company/?param=test#fragment").groups(),
+            ('http', 'www.beproud.jp', 'www.beproud.jp', None, None, '/company/', 'param=test', 'fragment'),
+        )
+
+        self.assertEquals(
+            url_re.match("http://www.beproud.jp:8000/company/").groups(),
+            ('http', 'www.beproud.jp:8000', 'www.beproud.jp', None, '8000', '/company/', None, None),
+        )
+
+        self.assertEquals(
+            url_re.match("http://www.beproud.jp:8000/company/?quer*?y=str#frag?m#ent").groups(),
+            ('http', 'www.beproud.jp:8000', 'www.beproud.jp', None, '8000', '/company/', 'quer*?y=str', 'frag?m#ent'),
+        )
+
+        self.assertEquals(
+            url_re.match("http://123.123.123.123:8000/company/?quer*?y=str#frag?m#ent").groups(),
+            ('http', '123.123.123.123:8000', None, '123.123.123.123', '8000', '/company/', 'quer*?y=str', 'frag?m#ent'),
+        )
+
+        self.assertTrue(url_re.match("http://www.テスト.jp:8000/company/") is None)
 
 class UrlizeTest(TestCase):
 
@@ -13,6 +66,13 @@ class UrlizeTest(TestCase):
             urlize(u'このURL、http://beproud.jpビープラウドホームページ'),
             u'このURL、<a href="http://beproud.jp">http://beproud.jp</a>ビープラウドホームページ',
         )
+
+    def test_url_trim(self):
+        self.assertEqual(
+            urlize(u'このURL、http://beproud.jp/?query=strビープラウドホームページ', trim_url_limit=23),
+            u'このURL、<a href="http://beproud.jp/?query=str">http://beproud.jp/?q...</a>ビープラウドホームページ',
+        )
+
 
 class HTMLSanitizationTest(TestCase):
     valid_tags = DEFAULT_VALID_TAGS
