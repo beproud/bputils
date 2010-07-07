@@ -14,7 +14,7 @@ setup (
       'Programming Language :: Python',
       'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    packages=["bputils"],
+    packages=find_packages("bputils"),
     test_suite="bputils.tests",
     zip_safe=True,
 )
