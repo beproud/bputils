@@ -14,7 +14,8 @@ setup (
       'Programming Language :: Python',
       'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    packages=find_packages("bputils"),
+    packages=find_packages(),
+    install_requires = ['simplejson >= 2.0.7',],
     test_suite="bputils.tests",
     zip_safe=True,
 )
