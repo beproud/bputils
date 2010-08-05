@@ -22,6 +22,7 @@ class MySQLCursor(object):
         # do something...
     """
 
+    _next = None
     def __init__(self, connection, rows=1, value_type=1):
         self.connection = connection
         self.rows = rows
@@ -32,11 +33,11 @@ class MySQLCursor(object):
     def query(self, sql):
         self.connection.query(sql)
         self.rs = self.connection.use_result()
+        self._next = None
     
     def __iter__(self):
         return self
 
-    _next = None
     def has_next(self):
         if self._next is None:
             self.row = self.rs.fetch_row(self.rows, self.value_type)
