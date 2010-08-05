@@ -33,14 +33,19 @@ class MySQLCursor(object):
         self.connection.query(sql)
         self.rs = self.connection.use_result()
     
-    def has_next(self):
-        self.row = self.rs.fetch_row(self.rows, self.value_type)
-        return bool(self.row)
-    
-    def next(self):
-        return self.row[0] if self.rows == 1 else self.row
-    
     def __iter__(self):
-        while(self.has_next()):
-            yield self.next()
+        return self
 
+    _next = None
+    def has_next(self):
+        if self._next is None:
+            self.row = self.rs.fetch_row(self.rows, self.value_type)
+            self._next = bool(self.row)
+        return self._next
+
+    def next(self):
+        if self.has_next():
+            self._next = None
+            return self.row[0] if self.rows == 1 else self.row
+        else:
+            raise StopIteration  
