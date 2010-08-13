@@ -11,7 +11,7 @@ def MySQLConnection(connect_info):
 
 class MySQLCursor(object):
     """
-    MySQLdb用のカーサークラス。
+    MySQLdb用のカーソルクラス。
 
     connection = get_connection({
         'db' : "imagawa",
