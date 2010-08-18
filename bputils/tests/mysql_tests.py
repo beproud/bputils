@@ -11,11 +11,14 @@ class TestMySQLCursor(TestCase):
     DB: dbutils_test
 
     MySQL データベースは必須
-    CREATE DATABASE dbutils_test CHARACTER SET utf8;
+    CREATE DATABASE bputils_test CHARACTER SET utf8;
     CREATE TABLE person (name CHAR(20) CHARACTER SET utf8 COLLATE utf8_bin);
+    INSERT INTO person (name) VALUES ('ian');
+    INSERT INTO person (name) VALUES ('tokibito');
+    INSERT INTO person (name) VALUES ('aodag');
     """
     def setUp(self):
-        self.conn = MySQLConnection({"host":"localhost", "user":"root", "db":"dbutils_test", "charset":"utf8"}) 
+        self.conn = MySQLConnection({"host":"localhost", "user":"root", "db":"bputils_test", "charset":"utf8"}) 
 
     def test_iteration(self):
         cursor = MySQLCursor(self.conn)
