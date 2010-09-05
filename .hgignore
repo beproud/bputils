@@ -8,13 +8,20 @@ bputils.egg-info
 *.o
 *.pyc
 *.swp
-docs/ja/build
-setup/venv/
-setup/bootstrap.py
+build
+dist
+parts
+eggs
+site_media
+develop-eggs
+bin/buildout
+bin/python
+bin/test
+.installed.cfg
+*-log.txt
+*.egg-info
+docs/**/build
 
 syntax: regexp
 .*\#.*\#$ 
-^bputils.egg-info/
 ^docs/[^/]+/build/
-^build/
-^dist/
