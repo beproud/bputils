@@ -3,8 +3,8 @@
 import re
 from unittest import TestCase
 
-from bputils.html import * 
-from bputils.html import DEFAULT_VALID_TAGS, DEFAULT_VALID_STYLES 
+from beproud.utils.html import * 
+from beproud.utils.html import DEFAULT_VALID_TAGS, DEFAULT_VALID_STYLES 
 
 class UrlReTest(TestCase):
     def test_loose_domain_re(self):

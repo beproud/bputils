@@ -1,10 +1,10 @@
-bputils ドキュメント
+beproud.utils ドキュメント
 ===================================
 
-bputilsとは？
+beproud.utilsとは？
 -----------------------------------
 
-bputilsはpythonのユティリティライブラリです。
+beproud.utilsはpythonのユティリティライブラリです。
 
 https://project.beproud.jp/hg/bputils/
 

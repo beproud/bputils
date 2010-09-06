@@ -1,18 +1,18 @@
 :mod:`javascript` -- JavascriptとJSONユティリティ
 ================================================================
 
-.. module:: bputils.javascript
+.. module:: beproud.utils.javascript
    :synopsis: JavascriptとJSONユティリティ
 .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 .. moduleauthor:: Shinya Okano <tokibito@beproud.jp>
 
-.. class:: bputils.javascript.SafeJSONEncoder
+.. class:: beproud.utils.javascript.SafeJSONEncoder
 
     ウェブブラウザで安全に扱えるようにJSONをエスケープするエンコーダーです。
     datetime.datetime、datetime.time、Decimalインスタンスも便利にエンコードします。
 
-    >>> from bputils import simplejson
-    >>> from bputils.javascript import SafeJSONEncoder
+    >>> from beproud.utils import simplejson
+    >>> from beproud.utils.javascript import SafeJSONEncoder
     >>> from datetime import datetime
     >>> data = {
     ...     "title": "<title>",
@@ -29,7 +29,7 @@
     '<','>','&'をJSONにそのままブラウザに送信すると、<script>タグが入っていて
     そのままjavascriptを実行される可能性があります。 （特に IE)
 
-    >>> from bputils.javascript import escapejs_json
+    >>> from beproud.utils.javascript import escapejs_json
     >>> escapejs_json("<test> & test")
     '"\\u003ctest\\u003e \\u0026 test"'
 
@@ -38,7 +38,7 @@
     pythonの値をjsの値に変換する。typenameを渡すと、そのタイプに変換します。
     'bool', 'int', 'string', 'array'をサポートしています。
 
-    >>> from bputils.javascript import force_js
+    >>> from beproud.utils.javascript import force_js
     >>> force_js("test")
     u'"test"'    
     >>> force_js("", "bool")

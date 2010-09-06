@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from decimal import Decimal
 
-from bputils.dbutils.mysql import *
+from beproud.utils.dbutils.mysql import *
 
 class TestMySQLCursor(TestCase):
     u"""

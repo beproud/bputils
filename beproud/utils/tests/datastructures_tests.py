@@ -3,7 +3,7 @@
 from datetime import datetime
 from unittest import TestCase
 
-from bputils.datastructures import *
+from beproud.utils.datastructures import *
 
 class CachedPropObj(object):
     id = 0

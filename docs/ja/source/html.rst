@@ -1,7 +1,7 @@
 :mod:`html` -- HTMLユティリティ
 ================================================================
 
-.. module:: bputils.html
+.. module:: beproud.utils.html
    :synopsis: HTMLユティリティ
 .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 

@@ -1,12 +1,12 @@
 :mod:`strutils` -- 文字列ユティリティ
 ================================================================
 
-.. module:: bputils.strutils
+.. module:: beproud.utils.strutils
    :synopsis: 文字列ユティリティ
 .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 .. moduleauthor:: Shinya Okano <tokibito@beproud.jp>
 
-.. class:: bputils.strutils.StrAndUnicode
+.. class:: beproud.utils.strutils.StrAndUnicode
 
 .. function:: force_unicode(s[, encoding[, strings_only[, errors]]])
 

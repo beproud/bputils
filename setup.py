@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
  
 setup (
-    name='bputils',
+    name='beproud.utils',
     version='0.1',
     description='Dependency free utilities',
     author='Ian Lewis',
@@ -15,7 +15,7 @@ setup (
       'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages=find_packages(),
-    install_requires = ['simplejson >= 2.0.7',],
-    test_suite="bputils.tests",
+    install_requires = ['simplejson >= 2.1.1',],
+    test_suite="beproud.utils.tests",
     zip_safe=True,
 )
