@@ -155,3 +155,11 @@ class CSSSanitizationTest(HTMLSanitizationTest):
             u'<span style="color:#FFF;font-weight:bold;">My Homepage</span>', 
         ),
     )
+
+class ExtraHTMLTest(HTMLSanitizationTest):
+    test_html = (
+        (
+            u'<input name=submit type=submit value=検索><span>Test</span>',
+            u'<span>Test</span>',
+        ),
+    )

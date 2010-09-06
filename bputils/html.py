@@ -32,9 +32,15 @@ __all__ = (
 # attributes whose values have no quotes and are non-ascii
 # i.e. <input name=submit type=submit value=検索>
 import HTMLParser
-HTMLParser.attrfind = re.compile(
-    r'\s*([a-zA-Z_][-.:a-zA-Z_0-9]*)(\s*=\s*'
-    r'(\'[^\']*\'|"[^"]*"|[^">\s]*))?')
+try:
+    _p = HTMLParser.HTMLParser()
+    _p.feed(u"<input name=submit type=submit value=検索>")
+    _p.close()
+except HTMLParser.HTMLParseError:
+    # Only patch HTMLParser if it's needed.
+    HTMLParser.attrfind = re.compile(
+        r'\s*([a-zA-Z_][-.:a-zA-Z_0-9]*)(\s*=\s*'
+        r'(\'[^\']*\'|"[^"]*"|[^">\s]*))?')
 
 try: 
     from django.utils.html import escape
