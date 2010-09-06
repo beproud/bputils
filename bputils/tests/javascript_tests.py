@@ -1,9 +1,8 @@
 # vim:fileencoding=utf-8
 from datetime import datetime,date,time
-
 from unittest import TestCase
+import simplejson
 
-from bputils import simplejson
 from bputils.javascript import * 
 
 class JavascriptUtilsTestCase(TestCase):

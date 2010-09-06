@@ -2,7 +2,7 @@
 import decimal
 import datetime
 
-from bputils import simplejson
+import simplejson
 
 __all__ = (
     'SafeJSONEncoder',
