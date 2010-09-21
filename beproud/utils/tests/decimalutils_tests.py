@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from decimal import Decimal
 
-from bputils.decimalutils import *
+from beproud.utils.decimalutils import *
 
 class TestDecimalUtils(TestCase):
 

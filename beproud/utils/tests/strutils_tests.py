@@ -1,7 +1,7 @@
 # vim:fileencoding=utf-8
 from unittest import TestCase
 
-from bputils.strutils import *
+from beproud.utils.strutils import *
 
 class StringUtilsTestCase(TestCase):
     

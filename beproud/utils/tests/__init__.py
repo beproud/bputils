@@ -5,10 +5,10 @@ import unittest
 import doctest
 
 def additional_tests():
-    import bputils.decimalutils
+    import beproud.utils.decimalutils
 
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(bputils.decimalutils))
+    suite.addTest(doctest.DocTestSuite(beproud.utils.decimalutils))
     return suite
 
 def main():

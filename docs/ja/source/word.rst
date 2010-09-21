@@ -1,18 +1,18 @@
 :mod:`word` -- 自然言語ユティリティ
 ================================================================
 
-.. module:: bputils.word
+.. module:: beproud.utils.word
    :synopsis:  自然言語ユティリティ
 .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 .. moduleauthor:: Shinya Okano <tokibito@beproud.jp>
 
-.. class:: bputils.word.Tokenizer
+.. class:: beproud.utils.word.Tokenizer
 
     `MeCab`_ を使って、文章を解析して、トーケンと特徴を出してくれるクラス。
 
     使い方は割と簡単::
 
-        >>> from bputils.word import Tokenizer
+        >>> from beproud.utils.word import Tokenizer
         >>> t = Tokenizer()
         >>> for token in t.tokenize(u"これはテスト文章です。MeCabはよく出来てきます。"):
         ...     print token

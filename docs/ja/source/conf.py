@@ -38,7 +38,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'bputils'
+project = u'beproud.utils'
 copyright = u'2009, K.K. BeProud'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -152,7 +152,7 @@ html_style = 'default.css'
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'bputilsdoc'
+htmlhelp_basename = 'beproud.utils'
 
 
 # Options for LaTeX output
@@ -167,7 +167,7 @@ htmlhelp_basename = 'bputilsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'bputilsdoc.tex', ur'bputils Documentation',
+  ('index', 'beproud.utils.tex', ur'beproud.utils Documentation',
    ur'Ian Lewis', 'manual'),
 ]
 
@@ -205,7 +205,7 @@ latex_documents = [
 # regardless of the global pdf_compressed setting.
 
 pdf_documents = [
-  ('index', u'bputils-Documentation', u'bputils ドキュメント', u'Ian Lewis'),
+  ('index', u'beproud.utils-Documentation', u'beproud.utils ドキュメント', u'Ian Lewis'),
 ]
 
 # A comma-separated list of custom stylesheets. Example:

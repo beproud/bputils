@@ -3,7 +3,7 @@
 # vim:fileencoding=utf-8
 from unittest import TestCase
 
-from bputils.word import * 
+from beproud.utils.word import * 
 
 TEST_FEATURE_MAP = (
     "word_class",

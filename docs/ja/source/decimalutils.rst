@@ -1,7 +1,7 @@
 :mod:`decimalutils` -- decimal モジュールユティリティ
 ================================================================
 
-.. module:: bputils.decimalutils 
+.. module:: beproud.utils.decimalutils 
    :synopsis: decimal モジュールユティリティ
 .. moduleauthor:: Ian Lewis <ian@beproud.jp>
 
@@ -11,7 +11,7 @@ decimalutils は Python の decimal モジュールの拡張ユティリティ�
 
     Decimal オブジェクトを変換する。対応タイプは int, long, float, basestring, unicode です。::
     
-        >>> from bputils.decimalutils import force_decimal 
+        >>> from beproud.utils.decimalutils import force_decimal 
         >>> force_decimal(1)
         Decimal('1')
         >>> force_decimal(1.128492)
@@ -31,7 +31,7 @@ decimalutils は Python の decimal モジュールの拡張ユティリティ�
     str(float) は 12有効数字まで、変換しますので、精度を損失しないようにしないといけない際は、precision_loss の引数を False にします。::
 
     
-        >>> from bputils.decimalutils import force_decimal
+        >>> from beproud.utils.decimalutils import force_decimal
         >>> import math
         >>> math.pi
         3.1415926535897931
@@ -44,7 +44,7 @@ decimalutils は Python の decimal モジュールの拡張ユティリティ�
 
     precision_loss は浮動小数点数の概算の精度を守るために、変換に工夫しますが、いらない有効数字が入る可能性があります。::
 
-        >>> from bputils.decimalutils import force_decimal
+        >>> from beproud.utils.decimalutils import force_decimal
         >>> force_decimal(1.1, precision_loss=False)
         Decimal('1.100000000000000088817841970')
 
