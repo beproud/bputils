@@ -3,8 +3,16 @@
 import re
 from unittest import TestCase
 
-from beproud.utils.html import * 
-from beproud.utils.html import DEFAULT_VALID_TAGS, DEFAULT_VALID_STYLES 
+from beproud.utils.html import (
+    LOOSE_DOMAIN_RE,
+    DOMAIN_RE,
+    IP_ADDRESS_RE,
+    URL_RE,
+    DEFAULT_VALID_TAGS,
+    DEFAULT_VALID_STYLES,
+    urlize,
+    sanitize_html,
+)
 
 class UrlReTest(TestCase):
     def test_loose_domain_re(self):
@@ -12,6 +20,9 @@ class UrlReTest(TestCase):
         self.assertEqual(domain_re.match("localhost").group(), 'localhost')
         self.assertTrue(domain_re.match("blah") is None)
         self.assertEqual(domain_re.match("beproud.jp").group(), 'beproud.jp')
+        self.assertEqual(domain_re.match("dev-xxx.beproud.jp").group(), 'dev-xxx.beproud.jp')
+        self.assertEqual(domain_re.match("dev_xxx.beproud.jp").group(), 'dev_xxx.beproud.jp')
+        self.assertEqual(domain_re.match("dev_xxx.be_proud.j_p").group(), 'dev_xxx.be_proud.j_p')
         self.assertEqual(domain_re.match("www2.beproud.jp").group(), 'www2.beproud.jp')
         self.assertEqual(domain_re.match("www2.static.beproud.jp").group(), 'www2.static.beproud.jp')
         self.assertEqual(domain_re.match("www2.static.beproud.zcode").group(), 'www2.static.beproud.zcode')
@@ -23,6 +34,10 @@ class UrlReTest(TestCase):
         self.assertEqual(domain_re.match("zcode.jp").group(), 'zcode.jp')
         self.assertEqual(domain_re.match("www2.zcode.jp").group(), 'www2.zcode.jp')
         self.assertEqual(domain_re.match("www2.static.zcode.jp").group(), 'www2.static.zcode.jp')
+        self.assertEqual(domain_re.match("dev-xxx.beproud.jp").group(), 'dev-xxx.beproud.jp')
+        self.assertTrue(domain_re.match("dev_xxx.beproud.jp") is None)
+        self.assertEqual(domain_re.match("devxxx.bep_roud.jp").group(), 'devxxx.be')
+        self.assertEqual(domain_re.match("devxxx.beproud.j_p").group(), 'devxxx.be')
         self.assertTrue(domain_re.match("www2.zcode") is None)
 
     def test_ip_address_re(self):

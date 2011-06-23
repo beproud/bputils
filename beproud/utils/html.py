@@ -163,7 +163,7 @@ URL_RE = r'(%s)\:\/\/(%s)(/[%s]*)?(?:\?([%s]*))?(?:\#([%s]*))?' % (
 )
 URL_RE_CMP = re.compile(URL_RE)
 
-LOOSE_DOMAIN_RE = r"(?:localhost|\w+\.\w+(?:\.\w+)*)"
+LOOSE_DOMAIN_RE = r"(?:localhost|[\w-]+\.[\w-]+(?:\.[\w-]+)*)"
 LOOSE_PORT_RE = "\d+"
 LOOSE_URL_RE = r'(%s)\:\/\/(%s)/([%s]*)(?:\?([%s]*))?(?:\#([%s]*))?' % (
     HTTP_SCHEME_RE,
