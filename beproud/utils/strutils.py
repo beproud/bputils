@@ -1,5 +1,5 @@
 # vim:fileencoding=utf-8
-import re
+
 from random import sample
 
 __all__ = (

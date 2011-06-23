@@ -1,7 +1,7 @@
 # vim:fileencoding=utf-8
 import re
 
-from strutils import StrAndUnicode, force_unicode
+from strutils import force_unicode
 
 RE_KEYWORD_EXTRACT = re.compile(u'名詞')
 RE_KEYWORD_URL = re.compile(r'(http(s)?:\/\/[A-Za-z0-9%&=~?+-_/.#]+)')
@@ -168,7 +168,6 @@ class Tokenizer(object):
         n = tagger.parseToNode(force_unicode(obj, encoding=self.encoding).encode("utf8"))
         n = n.next
 
-        word = u''
         while n:
             if n.surface:
                 features_dict = {}
