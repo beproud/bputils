@@ -178,3 +178,19 @@ class ExtraHTMLTest(HTMLSanitizationTest):
             u'<span>Test</span>',
         ),
     )
+
+class NoFollowTest(TestCase):
+    valid_tags = DEFAULT_VALID_TAGS
+    valid_styles = DEFAULT_VALID_STYLES
+    test_html = () 
+
+    def test_nofollow(self):
+        html = u'<a href="http://www.ianlewis.org/">This is a test</a>'
+        sanitized_html = sanitize_html(html, valid_tags=self.valid_tags, add_nofollow=True)
+        self.assertEqual(sanitized_html,
+            u'<a href="http://www.ianlewis.org/" rel="nofollow">This is a test</a>')
+
+        html = u'<a href="http://www.ianlewis.org/" rel="me">This is a test</a>'
+        sanitized_html = sanitize_html(html, valid_tags=self.valid_tags, add_nofollow=True)
+        self.assertEqual(sanitized_html,
+            u'<a href="http://www.ianlewis.org/" rel="me nofollow">This is a test</a>')

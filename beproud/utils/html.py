@@ -240,10 +240,12 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
     # Add rel="nofollow" links
     if add_nofollow:
         findall_kwargs = {}
-        if not instanceof(add_nofollow, bool):
+        if not isinstance(add_nofollow, bool):
             findall_kwargs["attrs"] = {"href": add_nofollow}
         for tag in soup.findAll("a", **findall_kwargs):
-            tag["rel"] = "nofollow" 
+            rel = tag.get('rel', '').split()
+            rel.append('nofollow')
+            tag['rel'] = ' '.join(rel)
 
     # Clean up CSS style tags
     for tag in soup.findAll(attrs={"style":re.compile(".*")}):
