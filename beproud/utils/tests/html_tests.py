@@ -182,6 +182,10 @@ class CSSSanitizationTest(HTMLSanitizationTest):
             u'<span style="border-width:5px;width:6px;border-left-width:10px">My Homepage</span>', 
             u'<span style="width:6px;">My Homepage</span>', 
         ),
+        (
+            u'<span style="position:absolute">My Homepage</span>', 
+            u'<span>My Homepage</span>', 
+        ),
     )
 
 class ExtraHTMLTest(HTMLSanitizationTest):

@@ -256,7 +256,10 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
                 style_name = style_name.strip()
                 if style_name in valid_styles:
                     styles.append('%s:%s' % (style_name, style_value.strip()))
-        tag["style"] = ';'.join(styles) + ';'
+        if styles:
+            tag["style"] = ';'.join(styles) + ';'
+        else:
+            del tag["style"]
 
     # Sanitize html text by changing bad text to entities.
     # BeautifulSoup will do this for href and src attributes
