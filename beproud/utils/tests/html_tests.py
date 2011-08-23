@@ -96,7 +96,11 @@ class HTMLSanitizationTest(TestCase):
 
     def test_html_sanitization(self):
         for html in self.test_html:
-            sanitized_html = sanitize_html(html[0], valid_tags=self.valid_tags)
+            sanitized_html = sanitize_html(
+                html[0],
+                valid_tags=self.valid_tags,
+                valid_styles=self.valid_styles,
+            )
             self.assertEqual(sanitized_html, html[1])
 
 class TagStrippingTest(HTMLSanitizationTest):
@@ -147,6 +151,7 @@ class CSSSanitizationTest(HTMLSanitizationTest):
     valid_styles = (
         "color",
         "font-weight",
+        'width',
     )
     test_html = (
         (
@@ -168,6 +173,14 @@ class CSSSanitizationTest(HTMLSanitizationTest):
         (
             u'<span style="  color:#FFF;  position:absolute;\tfont-weight:bold;  aaaaa">My Homepage</span>', 
             u'<span style="color:#FFF;font-weight:bold;">My Homepage</span>', 
+        ),
+        (
+            u'<span style="  color  : #FFF;  position:absolute;\tfont-weight:bold;  aaaaa">My Homepage</span>', 
+            u'<span style="color:#FFF;font-weight:bold;">My Homepage</span>', 
+        ),
+        (
+            u'<span style="border-width:5px;width:6px;border-left-width:10px">My Homepage</span>', 
+            u'<span style="width:6px;">My Homepage</span>', 
         ),
     )
 

@@ -206,7 +206,6 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
     from BeautifulSoup import BeautifulSoup, Comment
 
     js_regex = re.compile(r'[\s]*(&#x.{1,7})?'.join(list('javascript')))
-    css_regex = re.compile(r' *(%s): *([^;]*);?' % '|'.join(valid_styles), re.IGNORECASE)
     # Sanitize html with BeautifulSoup
     if encoding:
         soup = BeautifulSoup(htmlSource, fromEncoding=encoding)
@@ -249,10 +248,15 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
 
     # Clean up CSS style tags
     for tag in soup.findAll(attrs={"style":re.compile(".*")}):
-        style = ""
-        for key,val in css_regex.findall(tag["style"]):
-            style += "%s:%s;" % (key,val.strip())
-        tag["style"] = style
+        old_styles = [s.strip() for s in tag["style"].split(";")]
+        styles = []
+        for style in old_styles:
+            if ':' in style:
+                style_name, style_value = style.split(':')
+                style_name = style_name.strip()
+                if style_name in valid_styles:
+                    styles.append('%s:%s' % (style_name, style_value.strip()))
+        tag["style"] = ';'.join(styles) + ';'
 
     # Sanitize html text by changing bad text to entities.
     # BeautifulSoup will do this for href and src attributes
