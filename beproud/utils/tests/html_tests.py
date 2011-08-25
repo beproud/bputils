@@ -194,3 +194,12 @@ class NoFollowTest(TestCase):
         sanitized_html = sanitize_html(html, valid_tags=self.valid_tags, add_nofollow=True)
         self.assertEqual(sanitized_html,
             u'<a href="http://www.ianlewis.org/" rel="me nofollow">This is a test</a>')
+
+class SanitizeHtmlEncodingTest(TestCase):
+    valid_tags = DEFAULT_VALID_TAGS
+
+    def test_sanitize_html_encoding(self):
+        html = u'<a href="http://www.ianlewis.org/">テストテスト</a>'.encode("cp932")
+        sanitized_html = sanitize_html(html, valid_tags=self.valid_tags, encoding="cp932")
+        self.assertEqual(sanitized_html,
+            u'<a href="http://www.ianlewis.org/">テストテスト</a>')
