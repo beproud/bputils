@@ -249,15 +249,29 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
     # Clean up CSS style tags
     for tag in soup.findAll(attrs={"style":re.compile(".*")}):
         old_styles = [s.strip() for s in tag["style"].split(";")]
-        styles = []
+
+        # style_order preserves uniqueness 
+        styles = {}
+        # style_order preserves order
+        style_order=[]
         for style in old_styles:
             if ':' in style:
                 style_name, style_value = style.split(':')
-                style_name = style_name.strip()
+                # Style names are case insensitive so
+                # change to lowercase
+                style_name = style_name.strip().lower()
                 if style_name in valid_styles:
-                    styles.append('%s:%s' % (style_name, style_value.strip()))
+                    style_value = style_value.strip()
+                    if style_name in styles:
+                        styles[style_name] = style_value
+                        style_order.remove(style_name)
+                        style_order.append(style_name)
+                    else:
+                        styles[style_name] = style_value
+                        style_order.append(style_name)
+
         if styles:
-            tag["style"] = ';'.join(styles) + ';'
+            tag["style"] = ';'.join([('%s:%s' % (s, styles[s])) for s in style_order]) + ';'
         else:
             del tag["style"]
 
