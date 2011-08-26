@@ -206,7 +206,6 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
     from BeautifulSoup import BeautifulSoup, Comment
 
     js_regex = re.compile(r'[\s]*(&#x.{1,7})?'.join(list('javascript')))
-    css_regex = re.compile(r' *(%s): *([^;]*);?' % '|'.join(valid_styles), re.IGNORECASE)
     # Sanitize html with BeautifulSoup
     if encoding:
         soup = BeautifulSoup(htmlSource, fromEncoding=encoding)
@@ -249,10 +248,32 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
 
     # Clean up CSS style tags
     for tag in soup.findAll(attrs={"style":re.compile(".*")}):
-        style = ""
-        for key,val in css_regex.findall(tag["style"]):
-            style += "%s:%s;" % (key,val.strip())
-        tag["style"] = style
+        old_styles = [s.strip() for s in tag["style"].split(";")]
+
+        # style_order preserves uniqueness 
+        styles = {}
+        # style_order preserves order
+        style_order=[]
+        for style in old_styles:
+            if ':' in style:
+                style_name, style_value = style.split(':')
+                # Style names are case insensitive so
+                # change to lowercase
+                style_name = style_name.strip().lower()
+                if style_name in valid_styles:
+                    style_value = style_value.strip()
+                    if style_name in styles:
+                        styles[style_name] = style_value
+                        style_order.remove(style_name)
+                        style_order.append(style_name)
+                    else:
+                        styles[style_name] = style_value
+                        style_order.append(style_name)
+
+        if styles:
+            tag["style"] = ';'.join([('%s:%s' % (s, styles[s])) for s in style_order]) + ';'
+        else:
+            del tag["style"]
 
     # Sanitize html text by changing bad text to entities.
     # BeautifulSoup will do this for href and src attributes
