@@ -140,7 +140,7 @@ PORT_RE = "%s" % "|".join([
 
 # See: http://www.shauninman.com/archive/2006/05/08/validating_domain_names
 # See: http://www.iana.org/domains/root/db/
-DOMAIN_RE = '(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\\.)+(?:(?:a[cdefgilmnoqrstuwxz]|aero|arpa)|(?:b[abdefghijmnorstvwyz]|biz)|(?:c[acdfghiklmnorsuvxyz]|cat|com|coop)|d[ejkmoz]|(?:e[ceghrstu]|edu)|f[ijkmor]|(?:g[abdefghilmnpqrstuwy]|gov)|h[kmnrtu]|(?:i[delmnoqrst]|info|int)|(?:j[emop]|jobs)|k[eghimnprwyz]|l[abcikrstuvy]|(?:m[acdghklmnopqrstuvwxyz]|mil|mobi|museum)|(?:n[acefgilopruz]|name|net)|(?:om|org)|(?:p[aefghklmnrstwy]|pro)|qa|r[eouw]|s[abcdeghijklmnortvyz]|(?:t[cdfghjklmnoprtvwz]|travel)|u[agkmsyz]|v[aceginu]|w[fs]|y[etu]|z[amw])'
+DOMAIN_RE = '(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\\.)+(?:(?:aero|arpa|a[cdefgilmnoqrstuwxz])|(?:cat|com|coop|b[abdefghijmnorstvwyz]|biz)|(?:c[acdfghiklmnorsuvxyz])|d[ejkmoz]|(?:edu|e[ceghrstu])|f[ijkmor]|(?:gov|g[abdefghilmnpqrstuwy])|h[kmnrtu]|(?:info|int|i[delmnoqrst])|(?:jobs|j[emop])|k[eghimnprwyz]|l[abcikrstuvy]|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])|(?:name|net|n[acefgilopruz])|(?:om|org)|(?:pro|p[aefghklmnrstwy])|qa|r[eouw]|s[abcdeghijklmnortvyz]|(?:travel|t[cdfghjklmnoprtvwz])|u[agkmsyz]|v[aceginu]|w[fs]|y[etu]|z[amw])'
 # Domain with port number
 DOMAIN_PORT_RE = '(%s)(?::(%s))?' % (DOMAIN_RE, PORT_RE)
 
