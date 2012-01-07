@@ -76,10 +76,22 @@ class UrlReTest(TestCase):
 
 class UrlizeTest(TestCase):
 
+    def test_urlize(self):
+        self.assertEqual(
+            urlize(u'ペキペキ12月はカップル割り15％OFFです http://twitter.com/#!/PEKI_SHIBUYA/status/142081523179462656'),
+            u'ペキペキ12月はカップル割り15％OFFです <a href="http://twitter.com/#!/PEKI_SHIBUYA/status/142081523179462656">http://twitter.com/#!/PEKI_SHIBUYA/status/142081523179462656</a>',
+        )
+
     def test_domain_check(self):
         self.assertEqual(
             urlize(u'このURL、http://beproud.jpビープラウドホームページ'),
             u'このURL、<a href="http://beproud.jp">http://beproud.jp</a>ビープラウドホームページ',
+        )
+
+    def test_attrs(self):
+        self.assertEqual(
+            urlize(u'ペキペキ12月はカップル割り15％OFFです http://twitter.com/#!/PEKI_SHIBUYA/status/142081523179462656', attrs={'rel': 'nofollow'}),
+            u'ペキペキ12月はカップル割り15％OFFです <a href="http://twitter.com/#!/PEKI_SHIBUYA/status/142081523179462656" rel="nofollow">http://twitter.com/#!/PEKI_SHIBUYA/status/142081523179462656</a>',
         )
 
     def test_url_trim(self):
