@@ -257,7 +257,7 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
         style_order=[]
         for style in old_styles:
             if ':' in style:
-                style_name, style_value = style.split(':')
+                style_name, style_value = style.split(':', 1)
                 # Style names are case insensitive so
                 # change to lowercase
                 style_name = style_name.strip().lower()

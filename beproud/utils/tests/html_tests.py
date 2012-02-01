@@ -163,7 +163,8 @@ class CSSSanitizationTest(HTMLSanitizationTest):
     valid_styles = (
         "color",
         "font-weight",
-        'width',
+        "width",
+        "background-image",
     )
     test_html = (
         (
@@ -206,6 +207,10 @@ class CSSSanitizationTest(HTMLSanitizationTest):
         (
             u'<span style="position:absolute">My Homepage</span>', 
             u'<span>My Homepage</span>', 
+        ),
+        (
+            u'<span style="background-image:url(http://example.com/example.jpg);">My Homepage</span>', 
+            u'<span style="background-image:url(http://example.com/example.jpg);">My Homepage</span>', 
         ),
     )
 
