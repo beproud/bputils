@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
  
 setup (
     name='beproud.utils',
-    version='0.32',
+    version='0.33',
     description='Dependency free utilities',
     author='Ian Lewis',
     author_email='ianmlewis@beproud.jp',
