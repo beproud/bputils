@@ -2,9 +2,16 @@
 import decimal
 import datetime
 
-import simplejson
+try:
+    from django.utils import simplejson as json
+except ImportError:
+    try:
+        import simplejson as json
+    except ImportError:
+        import json
 
 __all__ = (
+    'json',
     'SafeJSONEncoder',
     'escapejs_json',
     'force_js',
@@ -23,7 +30,7 @@ JS_CONVERT_TYPES = {
     'array': list,
 }
 
-class SafeJSONEncoder(simplejson.JSONEncoder):
+class SafeJSONEncoder(json.JSONEncoder):
     """
     JSONEncoder subclass that knows how to encode date/time and decimal types
     and performs some extra javascript escaping.
@@ -63,4 +70,4 @@ def force_js(value, typename=None, encoder=None):
         typename = typename.lower()
         if typename in JS_CONVERT_TYPES:
             value = JS_CONVERT_TYPES[typename](value)
-    return simplejson.dumps(value, cls=(encoder or SafeJSONEncoder))
+    return json.dumps(value, cls=(encoder or SafeJSONEncoder))

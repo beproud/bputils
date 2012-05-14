@@ -16,7 +16,6 @@ setup (
     ],
     packages=find_packages(),
     namespace_packages=['beproud'],
-    install_requires = ['simplejson >= 2.1.1',],
     test_suite="beproud.utils.tests",
     zip_safe=True,
 )
