@@ -5,7 +5,7 @@ DICT=1
 DICT_WITH_TABLE=2
 
 def MySQLConnection(connect_info):
-    ''' 単純にMySQLのコネクションを作って返します。 '''
+    """ 単純にMySQLのコネクションを作って返します。 """
     import MySQLdb
     return MySQLdb.connect(**connect_info)
 
@@ -13,14 +13,14 @@ class MySQLCursor(object):
     """
     MySQLdb用のカーソルクラス。
 
-    connection = get_connection({
+    connection = MySQLConnection({
         'db' : "imagawa",
         'host' : "127.0.0.1",
         'port' : 3306,
         'user' : "user",
         'passwd' : "password"
     })
-    cursor = low_level_cursor(connection)
+    cursor = MySQLCursor(connection)
     cursor.query('select id, name, email from huge_data')
     for i in cursor:
         # do something...
