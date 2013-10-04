@@ -8,7 +8,6 @@ setup (
     description='Dependency free utilities',
     author='Ian Lewis',
     author_email='ianmlewis@beproud.jp',
-    url='https://project.beproud.jp/repo/bputils/',
     classifiers=[
       'Development Status :: 3 - Alpha',
       'Programming Language :: Python',
