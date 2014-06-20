@@ -138,7 +138,7 @@ class TagStrippingTest(HTMLSanitizationTest):
 class EntitiesTest(HTMLSanitizationTest):
     test_html = (
         (
-            u'<b>Ian\'s Homepage</b>', 
+            u'<b>Ian\'s Homepage</b>',
             u'<b>Ian&apos;s Homepage</b>',
         ),
         (
@@ -152,6 +152,10 @@ class EntitiesTest(HTMLSanitizationTest):
         (
             u'Ice Cream & &quot;Chocolate&quot;',
             u'Ice Cream &amp; &quot;Chocolate&quot;',
+        ),
+        (
+            u"hoge&#39;s & fuga's",
+            u"hoge&#39;s &amp; fuga&apos;s",
         )
     )
 

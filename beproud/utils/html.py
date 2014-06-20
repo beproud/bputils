@@ -52,12 +52,13 @@ except ImportError:
         """
         return force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
 
+
 def escape_entities(text):
-        return re.sub(r'&(?![A-Za-z]+;)', '&amp;', text)\
-                 .replace('<','&lt;')\
-                 .replace('>', '&gt;')\
-                 .replace('"', '&quot;')\
-                 .replace("'", '&apos;')
+    return (re.sub(r'&(?!([A-Za-z]+)|(#[0-9]+);)', '&amp;', text)
+              .replace('<', '&lt;')
+              .replace('>', '&gt;')
+              .replace('"', '&quot;')
+              .replace("'", '&apos;'))
 
 DEFAULT_VALID_TAGS = {
     'b': (),
