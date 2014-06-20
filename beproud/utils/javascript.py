@@ -3,12 +3,9 @@ import decimal
 import datetime
 
 try:
-    from django.utils import simplejson as json
+    import json
 except ImportError:
-    try:
-        import simplejson as json
-    except ImportError:
-        import json
+    import simplejson as json
 
 __all__ = (
     'json',
@@ -29,6 +26,7 @@ JS_CONVERT_TYPES = {
     'string': str,
     'array': list,
 }
+
 
 class SafeJSONEncoder(json.JSONEncoder):
     """
@@ -54,6 +52,7 @@ class SafeJSONEncoder(json.JSONEncoder):
         else:
             return super(SafeJSONEncoder, self).default(o)
 
+
 def escapejs_json(s):
     """
     JSONEncoderエスケープされない文字を追加エスケープ
@@ -61,6 +60,7 @@ def escapejs_json(s):
     for c, code in ESCAPEJS_JSON_STRING:
         s = s.replace(c, code)
     return s
+
 
 def force_js(value, typename=None, encoder=None):
     """
