@@ -1,5 +1,11 @@
 # vim:fileencoding=utf-8
 
+"""
+String utilities.
+"""
+
+import string
+
 from random import sample
 
 __all__ = (
@@ -65,8 +71,7 @@ except ImportError:
                     # without raising a further exception. We do an
                     # approximation to what the Exception's standard str()
                     # output should be.
-                    s = ' '.join([force_unicode(arg, encoding, strings_only,
-                            errors) for arg in s])
+                    s = ' '.join([force_unicode(arg, encoding, strings_only, errors) for arg in s])
         elif not isinstance(s, unicode):
             # Note: We use .decode() here, instead of unicode(s, encoding,
             # errors), so that if s is a SafeString, it ends up being a
@@ -90,8 +95,7 @@ except ImportError:
                     # An Exception subclass containing non-ASCII data that doesn't
                     # know how to print itself properly. We shouldn't raise a
                     # further exception.
-                    return ' '.join([smart_str(arg, encoding, strings_only,
-                            errors) for arg in s])
+                    return ' '.join([smart_str(arg, encoding, strings_only, errors) for arg in s])
                 return unicode(s).encode(encoding, errors)
         elif isinstance(s, unicode):
             return s.encode(encoding, errors)
@@ -100,21 +104,34 @@ except ImportError:
         else:
             return s
 
+
 def trim(s, encoding="utf-8"):
     """
     全角・半角も含めてトリミング
     """
     return force_unicode(s, encoding).strip()
 
+
 def force_int(num, default=None):
+    """
+    Force a value to an integer. If the value
+    cannot be converted return the default value.
+    """
     try:
         return int(num)
     except (ValueError, TypeError):
         return default
 
+
 def make_random_key(size=128, values=None):
+    """
+    Creates a random string value.
+
+    This does not create secure token values. If you need to
+    create a secure key you should use the hmac module
+    to create a salted HMAC-SHA1 token.
+    """
     if values is None:
-        import string
         values = string.letters + string.digits
     keys = ""
     src = list(values)
@@ -125,21 +142,24 @@ def make_random_key(size=128, values=None):
         keys += "".join(sample(src, (diff < 20 and diff or 20)))
     return keys
 
+
 def abbrev(s, num=255, end="..."):
     """
     文章を要約する
-    質問の文章などで利用
-
     返す文字列の長さは、num以上にならないのを保証します。
 
     >>> abbrev('spamspamspam', 6)
     'spa...'
     >>> abbrev('spamspamspam', 12)
     'spamspamspam'
-    >>> abbrev('blahblahblah', 13)
-    'eggseggseg...'
     >>> abbrev('eggseggseggs', 1)
     'e'
+    >>> abbrev('eggseggseggs', 2)
+    'eg'
+    >>> abbrev('eggseggseggs', 3)
+    'egg'
+    >>> abbrev('eggseggseggs', 4)
+    'e...'
     >>> abbrev('eggseggseggs', 2, '.')
     'e.'
     """
