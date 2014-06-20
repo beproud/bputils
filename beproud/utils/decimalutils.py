@@ -1,5 +1,16 @@
 #:coding=utf8:
 
+"""
+Utilities for decimal values. Many values have been copied from
+the python documentation.
+
+https://docs.python.org/2/library/decimal.html#recipes
+
+
+Many of these functions are *very* slow compared to the
+equivalent operations on float values. Use them sparingly.
+"""
+
 from decimal import (
     Decimal,
     Context,
@@ -9,7 +20,6 @@ from decimal import (
     Inexact,
 )
 
-#def force_decimal(obj,  
 __all__ = (
     'force_decimal',
     'pi',
@@ -20,9 +30,10 @@ __all__ = (
     'ln',
 )
 
+
 def force_decimal(d, precision_loss=True, numbers_only=False):
     """
-    Coerces a value to a Decimal object. 
+    Coerces a value to a Decimal object.
 
     If precision_loss is True then float objects are first converted
     to strings before being converted to Decimal objects. This can cause
@@ -33,7 +44,7 @@ def force_decimal(d, precision_loss=True, numbers_only=False):
     the method with precision_loss=False and method will be used that
     can convert the float without loosing information. This can, however,
     add extra information due to issues with binary floating point.
-    
+
     See: Is there a way to convert a regular float to a Decimal?
     http://docs.python.org/library/decimal.html#decimal-faq
 
@@ -55,7 +66,8 @@ def force_decimal(d, precision_loss=True, numbers_only=False):
     if numbers_only:
         return d
     else:
-        raise ValueError("Cannot convert object to Decimal: %r" % d)  
+        raise ValueError("Cannot convert object to Decimal: %r" % d)
+
 
 def float_to_decimal(f):
     """
@@ -70,6 +82,7 @@ def float_to_decimal(f):
         ctx.prec *= 2
         result = ctx.divide(numerator, denominator)
     return +result
+
 
 def pi():
     """
@@ -90,6 +103,7 @@ def pi():
         s += t
     getcontext().prec -= 2
     return +s               # unary plus applies the new precision
+
 
 def exp(x):
     """
@@ -117,6 +131,7 @@ def exp(x):
     getcontext().prec -= 2
     return +s
 
+
 def cos(x):
     """
     Return the cosine of x as measured in radians.
@@ -141,6 +156,7 @@ def cos(x):
     getcontext().prec -= 2
     return +s
 
+
 def sin(x):
     """
     Return the sine of x as measured in radians.
@@ -164,6 +180,7 @@ def sin(x):
         s += num / fact * sign
     getcontext().prec -= 2
     return +s
+
 
 def log(self, base=10, context=None):
     """
@@ -222,6 +239,7 @@ def log(self, base=10, context=None):
 
     return integer_part + decimal_frac
 
+
 def ln(self, context=None):
     """
     Returns the natural log of the given Decimal
@@ -240,4 +258,4 @@ def ln(self, context=None):
     if hasattr(self, "ln"):
         return self.ln(context)
     else:
-        return log(self, base=exp(Decimal("1.0"))) 
+        return log(self, base=exp(Decimal("1.0")))
