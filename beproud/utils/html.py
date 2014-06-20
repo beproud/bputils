@@ -1,6 +1,9 @@
 # vim:fileencoding=utf-8
+
 import re
 import string
+
+from .strutils import force_unicode
 
 __all__ = (
     'escape',
@@ -42,15 +45,16 @@ except HTMLParser.HTMLParseError:
         r'\s*([a-zA-Z_][-.:a-zA-Z_0-9]*)(\s*=\s*'
         r'(\'[^\']*\'|"[^"]*"|[^">\s]*))?')
 
-try: 
-    from django.utils.html import escape
-except ImportError:
-    from strutils import force_unicode
-    def escape(html):
-        """
-        Returns the given HTML with ampersands, quotes and angle brackets encoded.
-        """
-        return force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
+
+def escape(html):
+    """
+    Returns the given HTML with ampersands, quotes and angle brackets encoded.
+    """
+    return (force_unicode(html).replace('&', '&amp;')
+                               .replace('<', '&lt;')
+                               .replace('>', '&gt;')
+                               .replace('"', '&quot;')
+                               .replace("'", '&#39;'))
 
 
 def escape_entities(text):
@@ -126,7 +130,7 @@ URL_FRAGMENT_VALID_CHARS = URL_ALNUM + URL_SAFE + URL_EXTRA + URL_RESERVED + URL
 
 
 # 0-65535
-# See: http://www.regular-expressions.info/numericranges.html 
+# See: http://www.regular-expressions.info/numericranges.html
 PORT_RE = "%s" % "|".join([
     "6553[0-5]",
     "655[0-2][0^9]",
@@ -175,11 +179,14 @@ LOOSE_URL_RE = r'(%s)\:\/\/(%s)/([%s]*)(?:\?([%s]*))?(?:\#([%s]*))?' % (
 )
 LOOSE_URL_RE_CMP = re.compile(LOOSE_URL_RE)
 
-def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAULT_VALID_TAGS, valid_styles=DEFAULT_VALID_STYLES, add_nofollow=False):
+
+def sanitize_html(htmlSource, encoding=None, type="text/html",
+                  valid_tags=DEFAULT_VALID_TAGS, valid_styles=DEFAULT_VALID_STYLES,
+                  add_nofollow=False):
     """
     Clean bad html content. Currently this simply strips tags that
     are not in the VALID_TAGS setting.
-    
+
     This function is used as a replacement for feedparser's _sanitizeHTML
     and fixes problems like unclosed tags and gives finer grained control
     over what attributes can appear in what tags.
@@ -189,7 +196,7 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
     encoding is the encoding of the htmlSource
 
     type is the mimetype of the content. It is ignored and is present only
-    for compatibility with feedparser. 
+    for compatibility with feedparser.
 
     valid_tags is a dictionary containing keys of valid tag names which
     have a value that is a list of valid attribute names. An empty list
@@ -214,11 +221,11 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
         soup = BeautifulSoup(htmlSource)
 
     def entities(text):
-        return text.replace('<','&lt;')\
+        return text.replace('<', '&lt;')\
                    .replace('>', '&gt;')\
                    .replace('"', '&quot;')\
                    .replace("'", '&apos;')
-    
+
     # Sanitize html text by changing bad text to entities.
     # BeautifulSoup will do this for href and src attributes
     # on anchors and image tags but not for text.
@@ -234,8 +241,8 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
             tag.hidden = True
         else:
             tag.attrs = [(attr, js_regex.sub('', val))
-                            for attr, val in tag.attrs 
-                            if attr in valid_tags[tag.name]]
+                         for attr, val in tag.attrs
+                         if attr in valid_tags[tag.name]]
 
     # Add rel="nofollow" links
     if add_nofollow:
@@ -249,13 +256,14 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
                 tag['rel'] = ' '.join(rel)
 
     # Clean up CSS style tags
-    for tag in soup.findAll(attrs={"style":re.compile(".*")}):
+    for tag in soup.findAll(attrs={"style": re.compile(".*")}):
+
         old_styles = [s.strip() for s in tag["style"].split(";")]
 
-        # style_order preserves uniqueness 
+        # style_order preserves uniqueness
         styles = {}
         # style_order preserves order
-        style_order=[]
+        style_order = []
         for style in old_styles:
             if ':' in style:
                 style_name, style_value = style.split(':', 1)
@@ -283,12 +291,14 @@ def sanitize_html(htmlSource, encoding=None, type="text/html", valid_tags=DEFAUL
     for text in soup.findAll(text=True):
         text.replaceWith(escape_entities(text))
 
-    return soup.renderContents().decode('utf8') 
+    return soup.renderContents().decode('utf8')
 
 URLIZE_TMPL = '<a href="%(link_url)s"%(attrs)s>%(link_text)s</a>'
+
+
 def urlize(text, trim_url_limit=None, attrs={}, url_re=URL_RE_CMP, autoescape=False):
     """text内URLを抽出してアンカータグで囲む
-    
+
     URLのデリミタは半角カンマ、<>(エスケープ済み含む)、\s、全角スペース、行末で、これらが末尾にマッチしない場合はURLとして認識しません。
     URL部分は.+の最小マッチ、もしくはtrim_url_limitが指定された場合は{,trim_url_limit}の最小マッチとなります。
 
@@ -298,7 +308,7 @@ def urlize(text, trim_url_limit=None, attrs={}, url_re=URL_RE_CMP, autoescape=Fa
         trim_url_limit: urlとして認識する文字数に上限を設ける場合は数値をセット
         nofollow:       Trueを与えるとタグにrel="nofollow"を付加
         autoescape:     Trueを与えるとタグエスケープを行います。
-    
+
     """
     from strutils import abbrev
 
@@ -309,7 +319,8 @@ def urlize(text, trim_url_limit=None, attrs={}, url_re=URL_RE_CMP, autoescape=Fa
         return URLIZE_TMPL % {
             "link_url": m.group(),
             "attrs": "".join(map(lambda x: ' %s="%s"' % x, attrs.iteritems())),
-            "link_text": abbrev(m.group(), trim_url_limit) if trim_url_limit is not None else m.group(),
+            "link_text": (abbrev(m.group(), trim_url_limit)
+                          if trim_url_limit is not None else m.group()),
         }
 
     return url_re.sub(_repl, text)
