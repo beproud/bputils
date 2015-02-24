@@ -2,6 +2,7 @@
 
 # vim:fileencoding=utf-8
 from unittest import TestCase
+import unittest
 
 from beproud.utils.word import * 
 
@@ -18,12 +19,14 @@ TEST_FEATURE_MAP = (
 )
 
 class TokenizerTestCase(TestCase):
-    
+
+    @unittest.skip("deprecating tokenizer module")
     def test_encoding(self):
         tokenizer = Tokenizer(encoding="cp932")
         tokens = tokenizer.tokenize(u"これはテスト文章です".encode("cp932"))
         self.assertEqual(len(list(tokens)), 5)
 
+    @unittest.skip("deprecating tokenizer module")
     def test_features(self):
         tokenizer = Tokenizer()
         tokens = tokenizer.tokenize(u"これはテスト文章です")
@@ -31,6 +34,7 @@ class TokenizerTestCase(TestCase):
             for feature in TEST_FEATURE_MAP:
                 self.assertTrue(feature in token.features)
 
+    @unittest.skip("deprecating tokenizer module")
     def test_word_classes(self):
         tokenizer = Tokenizer(word_classes=["名詞"])
         tokens = tokenizer.tokenize(u"これはテスト文章です")
@@ -40,6 +44,7 @@ class TokenizerTestCase(TestCase):
         self.assertEquals(token_list[1], u"テスト")
         self.assertEquals(token_list[2], u"文章")
 
+    @unittest.skip("deprecating tokenizer module")
     def test_min_word_length(self):
         tokenizer = Tokenizer(min_word_length=3)
         tokens = tokenizer.tokenize(u"これはテスト文章です")
@@ -47,6 +52,7 @@ class TokenizerTestCase(TestCase):
         self.assertEquals(len(token_list), 1)
         self.assertEquals(token_list[0], u"テスト")
 
+    @unittest.skip("deprecating tokenizer module")
     def test_callback(self):
         def cb(word, features):
             self.assertTrue(isinstance(features, dict))
@@ -61,6 +67,7 @@ class TokenizerTestCase(TestCase):
         self.assertEquals(len(list(tokens)), 5)
         self.assertEquals(cb.count, 5)
     
+    @unittest.skip("deprecating tokenizer module")
     def test_callback_none(self):
         def cb(word, features):
             pass
