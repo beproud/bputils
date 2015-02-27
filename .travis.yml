@@ -1,0 +1,14 @@
+language: python
+sudo: false
+python:
+  - "2.7"
+# command to install dependencies
+install: "pip install -r requirements.txt"
+before_script:
+  - mysql -e 'create database bputils_test;'
+  - mysql bputils_test -e 'CREATE TABLE person (name CHAR(20) CHARACTER SET utf8 COLLATE utf8_bin);'
+  - mysql bputils_test -e "INSERT INTO person (name) VALUES ('ian');"
+  - mysql bputils_test -e "INSERT INTO person (name) VALUES ('tokibito');"
+  - mysql bputils_test -e "INSERT INTO person (name) VALUES ('aodag');" 
+# command to run tests
+script: python setup.py test
