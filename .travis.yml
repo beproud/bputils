@@ -6,7 +6,7 @@ python:
 install: "pip install -r requirements.txt"
 before_script:
   - mysql -e 'create database bputils_test;'
-  - mysql -e "grant all on bputils_test.* to bputils@localhost identifeid by 'bputils';"
+  - mysql -e "grant all on bputils_test.* to bputils@localhost identified by 'bputils';"
   - mysql bputils_test -e 'CREATE TABLE person (name CHAR(20) CHARACTER SET utf8 COLLATE utf8_bin);'
   - mysql bputils_test -e "INSERT INTO person (name) VALUES ('ian');"
   - mysql bputils_test -e "INSERT INTO person (name) VALUES ('tokibito');"
