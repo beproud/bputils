@@ -3,7 +3,7 @@ sudo: false
 python:
   - "2.7"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install: "pip install tox"
 before_script:
   - mysql -e 'create database bputils_test;'
   - mysql -u root -e "grant all on bputils_test.* to bputils@localhost identified by 'bputils';"
@@ -12,4 +12,4 @@ before_script:
   - mysql bputils_test -e "INSERT INTO person (name) VALUES ('tokibito');"
   - mysql bputils_test -e "INSERT INTO person (name) VALUES ('aodag');" 
 # command to run tests
-script: python setup.py test
+script: tox
