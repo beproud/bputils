@@ -49,7 +49,8 @@ class JavascriptUtilsTestCase(TestCase):
             "title": "<title>",
             "datetime": datetime(2009, 2, 19, 10, 22),
         }
-        self.assertEqual(
+        self.assertIn(
             json.dumps(data, cls=SafeJSONEncoder),
-            u'{"datetime": "2009-02-19 10:22:00", "title": "\\u003ctitle\\u003e"}',
+            (u'{"datetime": "2009-02-19 10:22:00", "title": "\\u003ctitle\\u003e"}',
+             u'{"title": "\\u003ctitle\\u003e", "datetime": "2009-02-19 10:22:00"}')
         )
