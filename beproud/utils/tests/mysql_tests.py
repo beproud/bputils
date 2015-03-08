@@ -18,7 +18,7 @@ class TestMySQLCursor(TestCase):
     INSERT INTO person (name) VALUES ('aodag');
     """
     def setUp(self):
-        self.conn = MySQLConnection({"host":"localhost", "user":"root", "db":"bputils_test", "charset":"utf8"}) 
+        self.conn = MySQLConnection({"host":"localhost", "user":"bputils", "db":"bputils_test", "passwd": 'bputils', "charset":"utf8"}) 
 
     def test_iteration(self):
         cursor = MySQLCursor(self.conn)

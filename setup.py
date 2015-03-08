@@ -16,5 +16,6 @@ setup(
     packages=find_packages(),
     namespace_packages=['beproud'],
     test_suite="beproud.utils.tests",
+    tests_require=['mysql-python', 'BeautifulSoup'],
     zip_safe=True,
 )
