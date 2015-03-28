@@ -1,6 +1,7 @@
 zenhan==0.4
-BeautifulSoup==3.2.0
-MySQL-python==1.2.3
+#BeautifulSoup==3.2.0
+BeautifulSoup4==4.3.2
+MySQL-python==1.2.5
 simplejson>=2.1.1
 #http://downloads.sourceforge.net/project/mecab/mecab-python/0.98/mecab-python-0.98.tar.gz
 #mecab-python==0.996
