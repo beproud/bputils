@@ -211,12 +211,13 @@ def sanitize_html(htmlSource, encoding=None, type="text/html",
     or a regex that can be matched against a url. If the regex matches
     then nofollow is added to the url.
     """
-    from BeautifulSoup import BeautifulSoup, Comment
+    from bs4 import BeautifulSoup, Comment
 
     js_regex = re.compile(r'[\s]*(&#x.{1,7})?'.join(list('javascript')))
     # Sanitize html with BeautifulSoup
     if encoding:
-        soup = BeautifulSoup(htmlSource, fromEncoding=encoding)
+        # soup = BeautifulSoup(htmlSource, fromEncoding=encoding)
+        soup = BeautifulSoup(htmlSource, from_encoding=encoding)
     else:
         soup = BeautifulSoup(htmlSource)
 
@@ -229,8 +230,8 @@ def sanitize_html(htmlSource, encoding=None, type="text/html",
     # Sanitize html text by changing bad text to entities.
     # BeautifulSoup will do this for href and src attributes
     # on anchors and image tags but not for text.
-    for text in soup.findAll(text=True):
-        text.replaceWith(entities(text))
+    # for text in soup.findAll(text=True):
+    #     text.replaceWith(entities(text))
 
     # コメントを削る
     for comment in soup.findAll(text=lambda text: isinstance(text, Comment)):
@@ -240,9 +241,13 @@ def sanitize_html(htmlSource, encoding=None, type="text/html",
         if tag.name not in valid_tags:
             tag.hidden = True
         else:
-            tag.attrs = [(attr, js_regex.sub('', val))
-                         for attr, val in tag.attrs
-                         if attr in valid_tags[tag.name]]
+            tag.attrs = dict([(attr,
+                               js_regex.sub('', val)
+                               if isinstance(val, basestring)
+                               else [js_regex.sub('', v)
+                                     for v in val])
+                              for attr, val in tag.attrs.items()
+                              if attr in valid_tags[tag.name]])
 
     # Add rel="nofollow" links
     if add_nofollow:
@@ -250,7 +255,8 @@ def sanitize_html(htmlSource, encoding=None, type="text/html",
         if not isinstance(add_nofollow, bool):
             findall_kwargs["attrs"] = {"href": add_nofollow}
         for tag in soup.findAll("a", **findall_kwargs):
-            rel = tag.get('rel', '').split()
+            rel = tag.get('rel', '')
+            rel = rel.split() if isinstance(rel, basestring) else rel
             if 'nofollow' not in rel:
                 rel.append('nofollow')
                 tag['rel'] = ' '.join(rel)
@@ -288,10 +294,11 @@ def sanitize_html(htmlSource, encoding=None, type="text/html",
     # Sanitize html text by changing bad text to entities.
     # BeautifulSoup will do this for href and src attributes
     # on anchors and image tags but not for text.
-    for text in soup.findAll(text=True):
-        text.replaceWith(escape_entities(text))
+    # for text in soup.findAll(text=True):
+    #     text.replaceWith(escape_entities(text))
 
-    return soup.renderContents().decode('utf8')
+    # return soup.renderContents().decode('utf8')
+    return soup.encode(encoding='utf8', formatter=escape_entities).decode('utf8')
 
 URLIZE_TMPL = '<a href="%(link_url)s"%(attrs)s>%(link_text)s</a>'
 

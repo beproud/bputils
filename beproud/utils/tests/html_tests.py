@@ -153,10 +153,15 @@ class EntitiesTest(HTMLSanitizationTest):
             u'Ice Cream & &quot;Chocolate&quot;',
             u'Ice Cream &amp; &quot;Chocolate&quot;',
         ),
+        #
+        # (
+        #     u"hoge&#39;s & fuga's",
+        #     u"hoge&#39;s &amp; fuga&apos;s",
+        # ),
         (
             u"hoge&#39;s & fuga's",
-            u"hoge&#39;s &amp; fuga&apos;s",
-        )
+            u"hoge&apos;s &amp; fuga&apos;s",
+        ),
     )
 
 class CSSSanitizationTest(HTMLSanitizationTest):
